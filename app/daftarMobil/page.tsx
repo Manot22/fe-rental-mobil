@@ -3,6 +3,23 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { BsFuelPumpDieselFill } from "react-icons/bs";
+import { FaRupiahSign } from "react-icons/fa6";
+import { PiOfficeChairFill } from "react-icons/pi";
+import { CiMenuKebab } from "react-icons/ci";
+
+// Dropdown
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface daftar_mobil {
   id: number;
@@ -15,6 +32,7 @@ interface daftar_mobil {
 
 const DaftarMobil = () => {
   const [daftar_mobils, setDaftar_mobils] = useState<daftar_mobil[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     axios
@@ -32,43 +50,75 @@ const DaftarMobil = () => {
       );
   };
 
+  const handleEdit = (id: number) => {
+    router.push(`daftarMobil/edit/${id}`);
+  };
+
   return (
-    <section className="container mx-auto">
-      <div className="flex justify-center items-center py-8">
-        <h1 className="font-bold text-2xl">Daftar Mobil</h1>
+    <section className="container mx-auto mb-8">
+      <div className="flex justify-center items-center m-3">
+        <h1 className="font-bold text-2xl text-indigo-500">Daftar Mobil</h1>
       </div>
+      <Link href="/daftarMobil/addDaftarMobil">
+        <button
+          type="submit"
+          className="border-2 border-white rounded-xl m-4 px-8 bg-indigo-500 text-white hover:bg-white hover:text-black hover:border-2 hover:border-indigo-500"
+        >
+          Tambah
+        </button>
+      </Link>
       {/* Mobil 1 */}
-      <div className=" border border-indigo-600 p-6">
-        <ul className="grid md:grid-cols-3 grid-cols-2 gap-8">
+      <div className="">
+        <ul className="grid md:grid-cols-3 grid-cols-1 gap-8">
           {daftar_mobils.map((daftar_mobil) => (
             // eslint-disable-next-line react/jsx-key
-            <li className="">
+            <li className="border-2 border-blue-500 rounded-2xl p-4 shadow-xl">
               <div className="flex justify-between">
-                <span className="whitespace-nowrap bg-black text-white rounded-lg px-3 py-1.5 text-xs font-medium">
-                  {" "}
-                  {daftar_mobil.merk}{" "}
-                </span>
-                <button
-                  onClick={() => deleteMobil(daftar_mobil.id)}
-                  className="rounded-md bg-red-600 p-1 w-[75px] text-sm font-medium transition hover:scale-105"
-                >
-                  Hapus
-                </button>
+                <h1 className="whitespace-nowrap text-blue-600 font-bold rounded-lg px-3 py-1.5 text-md">
+                  {daftar_mobil.merk}
+                </h1>
+                {/* DROPDOWN */}
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                      <CiMenuKebab />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem
+                      onClick={() => handleEdit(daftar_mobil.id)}
+                    >
+                      Edit
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      onClick={() => deleteMobil(daftar_mobil.id)}
+                    >
+                      Hapus
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
               <h3 className="mt-4 text-lg font-medium text-gray-900">
                 {daftar_mobil.nama}
               </h3>
-              <p className="mt-1.5 text-sm text-gray-700">
-                Harga: {daftar_mobil.harga}
-              </p>
-              <p className="mt-1.5 text-sm text-gray-700">
-                Kursi: {daftar_mobil.kursi}
-              </p>
-              <p className="mt-1.5 text-sm text-gray-700">
-                Bahan Bakar: {daftar_mobil.bahan_bakar}
-              </p>
+              <div className="grid grid-cols-2 ">
+                <p className="mt-1.5 text-sm text-gray-700 flex items-center gap-2">
+                  <FaRupiahSign /> {daftar_mobil.harga}
+                </p>
+                <p className="mt-1.5 text-sm text-gray-700 flex justify-end items-center gap-2">
+                  <PiOfficeChairFill /> {daftar_mobil.kursi}
+                </p>
+                <p className="mt-1.5 text-sm text-gray-700 flex items-center gap-2">
+                  <BsFuelPumpDieselFill /> {daftar_mobil.bahan_bakar}
+                </p>
+              </div>
               <form className="mt-4">
-                <button className="block w-full rounded bg-indigo-400 p-4 text-sm font-medium transition hover:scale-105">
+                <button
+                  type="submit"
+                  className="block w-full rounded-2xl bg-blue-500 hover:bg-blue-700 text-white p-4 text-sm font-medium transition hover:scale-105"
+                >
                   Sewa Mobil
                 </button>
               </form>
