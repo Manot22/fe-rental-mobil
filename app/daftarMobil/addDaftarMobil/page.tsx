@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 
 const Tambah = () => {
+  const [image, setImage] = useState<File | null>(null);
   const [nama, setNama] = useState("");
   const [merk, setMerk] = useState("");
   const [kursi, setKursi] = useState("");
@@ -14,19 +15,37 @@ const Tambah = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Pastikan file gambar sudah dipilih
+    if (!image) {
+      alert("Please select an image");
+      return;
+    }
+
     try {
-      await axios.post("http://localhost:8000/api/daftar_mobil", {
-        nama,
-        merk,
-        kursi,
-        bahan_bakar,
-        harga,
+      // Buat FormData untuk mengirim file dan data lainnya
+      const formData = new FormData();
+      formData.append("image", image); // append gambar
+      formData.append("nama", nama); // append nama
+      formData.append("merk", merk); // append merk
+      formData.append("kursi", kursi); // append kursi
+      formData.append("bahan_bakar", bahan_bakar); // append bahan bakar
+      formData.append("harga", harga); // append harga
+
+      // Kirim request dengan axios
+      await axios.post("http://localhost:8000/api/daftar_mobil", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Pastikan header ini diset
+        },
       });
+
+      // Redirect setelah berhasil
       router.push("/daftarMobil");
     } catch (error) {
       console.error("gagal nambah data mobil:", error);
     }
   };
+
   return (
     <div className="mx-auto max-w-screen-xl mt-8">
       <div className="mx-auto max-w-lg text-center">
@@ -42,6 +61,19 @@ const Tambah = () => {
         onSubmit={handleSubmit}
         className="mx-auto mb-0 mt-8 max-w-md space-y-4"
       >
+        <div className="relative">
+          <input
+            id="image"
+            type="file"
+            onChange={(e) =>
+              setImage(e.target.files ? e.target.files[0] : null)
+            }
+            required
+            className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+            accept=".jpeg,.jpg,.png,.gif"
+            placeholder="Masukkan Foto"
+          />
+        </div>
         <div className="relative">
           <input
             id="nama"

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import { BsFuelPumpDieselFill } from "react-icons/bs";
 import { FaRupiahSign } from "react-icons/fa6";
@@ -23,6 +24,7 @@ import {
 
 interface daftar_mobil {
   id: number;
+  image: string;
   nama: string;
   merk: string;
   kursi: number;
@@ -31,21 +33,21 @@ interface daftar_mobil {
 }
 
 const DaftarMobil = () => {
-  const [daftar_mobils, setDaftar_mobils] = useState<daftar_mobil[]>([]);
+  const [daftar_mobil, setDaftar_mobil] = useState<daftar_mobil[]>([]);
   const router = useRouter();
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/daftar_mobil")
-      .then((response) => setDaftar_mobils(response.data.data));
+      .get("http://localhost:8000/api/daftar_mobil/")
+      .then((response) => setDaftar_mobil(response.data.data));
   }, []);
 
   const deleteMobil = (id: number) => {
     axios
       .delete(`http://localhost:8000/api/daftar_mobil/${id}`)
       .then(() =>
-        setDaftar_mobils(
-          daftar_mobils.filter((daftar_mobils) => daftar_mobils.id !== id)
+        setDaftar_mobil(
+          daftar_mobil.filter((daftar_mobil) => daftar_mobil.id !== id)
         )
       );
   };
@@ -70,9 +72,16 @@ const DaftarMobil = () => {
       {/* Mobil 1 */}
       <div className="">
         <ul className="grid md:grid-cols-3 grid-cols-1 gap-8">
-          {daftar_mobils.map((daftar_mobil) => (
+          {daftar_mobil.map((daftar_mobil) => (
             // eslint-disable-next-line react/jsx-key
             <li className="border-2 border-blue-500 rounded-2xl p-4 shadow-xl">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_API_BACKEND}/storage/${daftar_mobil.image}`}
+                width={350}
+                height={350}
+                className="rounded-3"
+                alt=""
+              />
               <div className="flex justify-between">
                 <h1 className="whitespace-nowrap text-blue-600 font-bold rounded-lg px-3 py-1.5 text-md">
                   {daftar_mobil.merk}
