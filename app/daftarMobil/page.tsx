@@ -38,7 +38,7 @@ const DaftarMobil = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/daftar_mobil/")
+      .get("http://localhost:8000/api/daftar_mobil")
       .then((response) => setDaftar_mobil(response.data.data));
   }, []);
 
@@ -70,71 +70,75 @@ const DaftarMobil = () => {
         </button>
       </Link>
       {/* Mobil 1 */}
-      <div className="">
-        <ul className="grid md:grid-cols-3 grid-cols-1 gap-8">
-          {daftar_mobil.map((daftar_mobil) => (
-            // eslint-disable-next-line react/jsx-key
-            <li className="border-2 border-blue-500 rounded-2xl p-4 shadow-xl">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_API_BACKEND}/storage/${daftar_mobil.image}`}
-                width={350}
-                height={350}
-                className="rounded-3"
-                alt=""
-              />
-              <div className="flex justify-between">
-                <h1 className="whitespace-nowrap text-blue-600 font-bold rounded-lg px-3 py-1.5 text-md">
-                  {daftar_mobil.merk}
-                </h1>
-                {/* DROPDOWN */}
 
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">
-                      <CiMenuKebab />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
-                    <DropdownMenuSeparator />
-                    <DropdownMenuCheckboxItem
-                      onClick={() => handleEdit(daftar_mobil.id)}
-                    >
-                      Edit
-                    </DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem
-                      onClick={() => deleteMobil(daftar_mobil.id)}
-                    >
-                      Hapus
-                    </DropdownMenuCheckboxItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">
-                {daftar_mobil.nama}
-              </h3>
-              <div className="grid grid-cols-2 ">
-                <p className="mt-1.5 text-sm text-gray-700 flex items-center gap-2">
-                  <FaRupiahSign /> {daftar_mobil.harga}
-                </p>
-                <p className="mt-1.5 text-sm text-gray-700 flex justify-end items-center gap-2">
-                  <PiOfficeChairFill /> {daftar_mobil.kursi}
-                </p>
-                <p className="mt-1.5 text-sm text-gray-700 flex items-center gap-2">
-                  <BsFuelPumpDieselFill /> {daftar_mobil.bahan_bakar}
-                </p>
-              </div>
-              <form className="mt-4">
-                <button
-                  type="submit"
-                  className="block w-full rounded-2xl bg-blue-500 hover:bg-blue-700 text-white p-4 text-sm font-medium transition hover:scale-105"
-                >
-                  Sewa Mobil
-                </button>
-              </form>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul className="grid md:grid-cols-3 grid-cols-2 gap-8 box-border w-auto h-auto">
+        {daftar_mobil.map((daftar_mobil) => (
+          // eslint-disable-next-line react/jsx-key
+          <li
+            key={daftar_mobil.id}
+            className="border-2 border-blue-500 rounded-2xl p-4 shadow-xl"
+          >
+            <Image
+              src={`${process.env.NEXT_PUBLIC_API_BACKEND}/storage/images/${daftar_mobil.image}`}
+              width={350}
+              height={350}
+              className="w-full max-h-64 object-cover rounded-lg"
+              alt="..."
+            />
+
+            <div className="flex justify-between items-center">
+              <h1 className="whitespace-nowrap text-blue-600 font-bold rounded-lg px-3 py-1.5 text-md">
+                {daftar_mobil.merk}
+              </h1>
+
+              {/* DROPDOWN */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="" variant="outline">
+                    <CiMenuKebab />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuSeparator />
+                  <DropdownMenuCheckboxItem
+                    onClick={() => handleEdit(daftar_mobil.id)}
+                  >
+                    Edit
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    onClick={() => deleteMobil(daftar_mobil.id)}
+                  >
+                    Hapus
+                  </DropdownMenuCheckboxItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            <h3 className="text-lg font-medium text-gray-900">
+              {daftar_mobil.nama}
+            </h3>
+            <div className="grid grid-cols-2 ">
+              <p className="mt-1.5 text-sm text-gray-700 flex items-center gap-2">
+                <FaRupiahSign /> {daftar_mobil.harga}
+              </p>
+              <p className="mt-1.5 text-sm text-gray-700 flex justify-end items-center gap-2">
+                <PiOfficeChairFill /> {daftar_mobil.kursi}
+              </p>
+              <p className="mt-1.5 text-sm text-gray-700 flex items-center gap-2">
+                <BsFuelPumpDieselFill /> {daftar_mobil.bahan_bakar}
+              </p>
+            </div>
+            <form className="mt-4">
+              <button
+                type="submit"
+                className="block w-full rounded-2xl bg-blue-500 hover:bg-blue-700 text-white p-4 text-sm font-medium transition hover:scale-105"
+              >
+                Sewa Mobil
+              </button>
+            </form>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 };

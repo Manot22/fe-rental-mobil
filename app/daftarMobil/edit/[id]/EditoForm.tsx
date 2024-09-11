@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 
 interface EditMobilProps {
   initialData: {
+    image: string;
     nama: string;
     merk: string;
     kursi: number;
@@ -15,6 +16,7 @@ interface EditMobilProps {
 }
 
 const EditForm = ({ initialData, id, isNew = false }: EditMobilProps) => {
+  const [image, setImage] = useState(initialData.image || "");
   const [nama, setNama] = useState(initialData.nama || "");
   const [merk, setMerk] = useState(initialData.merk || "");
   const [kursi, setKursi] = useState(initialData.kursi || "");
@@ -59,6 +61,7 @@ const EditForm = ({ initialData, id, isNew = false }: EditMobilProps) => {
 
   useEffect(() => {
     if (!isNew) {
+      setImage(initialData.image || "");
       setNama(initialData.nama || "");
       setMerk(initialData.merk || "");
       setKursi(initialData.kursi || 0);
